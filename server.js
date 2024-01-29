@@ -5,6 +5,16 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, { cors: { origin: "*" } });
 
+app.get("/", (req, res) => {
+  fs.readFile("index.html", "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    res.send(data);
+  });
+});
+
 app.get("/home", (req, res) => {
   fs.readFile("home.html", "utf8", (err, data) => {
     if (err) {
@@ -48,7 +58,7 @@ server.listen(
 var messages = [];
 function saveMessage(data) {
   for (let i = 0; i < messages.length; i++) {
-    if (messages[i].name == data.name) {
+    if (messages[i].name.toLowerCase() == data.name.toLowerCase()) {
       messages[i].body = data.body;
       return;
     }
@@ -59,24 +69,22 @@ function saveMessage(data) {
 
 io.on("connection", (socket) => {
   socket.on("message", (data) => {
-    if (data.name == "trainer") {
+    if (data.name.toLowerCase() == "trainer") {
       if (data.body == "delete") {
         messages = [];
       } else if (data.body == "clear") {
         for (let i = 0; i < messages.length; i++) {
           messages[i].body = "";
         }
-      }
-      else if(data.body.startsWith("deletename")){
+      } else if (data.body.startsWith("deletename")) {
         const studentName = data.body.split(" ")[1];
         console.log(studentName);
         for (let i = 0; i < messages.length; i++) {
-          if(messages[i].name == studentName){
-            messages.splice(i,1);
+          if (messages[i].name == studentName) {
+            messages.splice(i, 1);
             break;
           }
         }
-        
       }
     } else {
       saveMessage(data);
