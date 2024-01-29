@@ -56,6 +56,29 @@ server.listen(
 //------------------------------------------------------------
 
 var messages = [];
+
+function doTrainerCommand(data) {
+  if (data.body == "delete") {
+    messages = [];
+    return;
+  }
+  if (data.body == "clear") {
+    for (let i = 0; i < messages.length; i++) {
+      messages[i].body = "";
+    }
+    return;
+  }
+  if (data.body.startsWith("deletename")) {
+    const studentName = data.body.replace("deletename ","").toLowerCase();
+    for (let i = 0; i < messages.length; i++) {
+      if (messages[i].name.toLowerCase() == studentName) {
+        messages.splice(i, 1);
+        break;
+      }
+    }
+  }
+}
+
 function saveMessage(data) {
   for (let i = 0; i < messages.length; i++) {
     if (messages[i].name.toLowerCase() == data.name.toLowerCase()) {
@@ -70,22 +93,7 @@ function saveMessage(data) {
 io.on("connection", (socket) => {
   socket.on("message", (data) => {
     if (data.name.toLowerCase() == "trainer") {
-      if (data.body == "delete") {
-        messages = [];
-      } else if (data.body == "clear") {
-        for (let i = 0; i < messages.length; i++) {
-          messages[i].body = "";
-        }
-      } else if (data.body.startsWith("deletename")) {
-        const studentName = data.body.split(" ")[1];
-        console.log(studentName);
-        for (let i = 0; i < messages.length; i++) {
-          if (messages[i].name == studentName) {
-            messages.splice(i, 1);
-            break;
-          }
-        }
-      }
+      doTrainerCommand(data);
     } else {
       saveMessage(data);
     }
