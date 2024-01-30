@@ -28,10 +28,12 @@
 
     <div id="messages"></div>
     <script>
+        const serverURL = "https://ticksncrosses.glitch.me";
+      
         const txtName = document.getElementById("name");
         const txtMessage = document.getElementById("message");
 
-        const socket = io("https://ticksncrosses.glitch.me");
+        const socket = io(serverURL);
         socket.on("connection");
 
         function sendMessage() {

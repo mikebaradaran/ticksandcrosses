@@ -1,17 +1,14 @@
 <html>
   <head>
-    <style>
-      div {
-        float: left;
-      }
-    </style>
   </head>
   <body>
-    <div>
-      <object data="https://ticksncrosses.glitch.me/home"></object>
-    </div>
-    <div>
-      <object data="https://ticksncrosses.glitch.me/trainer" height="700"></object>
-    </div>
+      <object id="home" height="700"></object>
+      <object id="trainer" height="700"></object>
+
+    <script>
+      const serverURL = "https://ticksncrosses.glitch.me/";
+      document.getElementById("home").data = serverURL + "home";
+      document.getElementById("trainer").data = serverURL + "trainer";
+    </script>
   </body>
 </html>

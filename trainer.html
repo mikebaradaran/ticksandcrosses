@@ -25,6 +25,8 @@
     <div id="messages"></div>
 
     <script>
+        const serverURL = "https://ticksncrosses.glitch.me";
+      
         const divMessages = document.getElementById("messages");
 
         function displayData(data) {
@@ -37,7 +39,7 @@
             divMessages.innerHTML = messages + "</table>";
         }
         //-------------------------------------------------------------
-        const socket = io("https://ticksncrosses.glitch.me");
+        const socket = io(serverURL);
         socket.on("connection");
         let msg = {
                 name: "trainer",
